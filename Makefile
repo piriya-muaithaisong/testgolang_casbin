@@ -36,20 +36,4 @@ server:
 mock:
 	mockgen -package mockdb -destination ./db/mock/store.go github.com/piriya-muaithaisong/Simple-Bank/db/sqlc Store
 
-proto:
-	rm -f pb/*.go
-	rm -f doc/swagger/*.swagger.json
-	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
-    --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
-	--grpc-gateway_out=pb --grpc-gateway_opt paths=source_relative \
-	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=simple_bank_api \
-    proto/*.proto
-	statik -src doc/swagger -dest doc
-
-evans:
-	evans --host localhost --port 9000 -r repl
-
-redis:
-	docker run --name redis -p 6379:6379 -d redis:7-alpine
-
-.PHONY: postgres_run createdb dropdb migrateup migratedown sqlc db server postgres_start mock migrateup1 migratedown1 proto evans redis
+.PHONY: postgres_run createdb dropdb migrateup migratedown sqlc db server postgres_start mock migrateup1 migratedown1 mock
