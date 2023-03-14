@@ -1,6 +1,6 @@
 CREATE TABLE "users" (
-  "id" uuid,
-  "username" varchar,
+  "id" uuid UNIQUE,
+  "username" varchar UNIQUE,
   "hashed_password" varchar NOT NULL,
   "full_name" varchar NOT NULL,
   "role" varchar NOT NULL,
@@ -10,17 +10,17 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "assets" (
-  "id" uuid PRIMARY KEY,
+  "id" uuid UNIQUE PRIMARY KEY,
   "asset_name" varchar NOT NULL,
-  "owner" varchar NOT NULL,
-  "tester" varchar NOT NULL
+  "owner" uuid NOT NULL,
+  "tester" uuid NOT NULL
 );
 
 CREATE TABLE "result" (
-  "id" uuid PRIMARY KEY,
+  "id" uuid UNIQUE PRIMARY KEY,
   "result_name" varchar NOT NULL,
-  "assets" varchar NOT NULL,
-  "tester" varchar NOT NULL
+  "assets" uuid NOT NULL,
+  "tester" uuid NOT NULL
 );
 
 CREATE TABLE "sessions" (
