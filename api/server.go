@@ -1,28 +1,32 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	db "github.com/piriya-muaithaisong/testgolang_casbin/db/sqlc"
+	"github.com/piriya-muaithaisong/testgolang_casbin/token"
 	"github.com/piriya-muaithaisong/testgolang_casbin/utils"
 )
 
 type Server struct {
-	config utils.Config
-	store  db.Store
-	router *gin.Engine
-	// s
+	config     utils.Config
+	store      db.Store
+	router     *gin.Engine
+	tokenMaker token.Maker
 }
 
 func NewServer(config utils.Config, store db.Store) (*Server, error) {
-	// tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 
-	// if err != nil {
-	// 	return nil, fmt.Errorf("cannot create token maker: %w", err)
-	// }
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
 	server := &Server{
-		store: store,
-		// tokenMaker: tokenMaker,
-		config: config,
+		store:      store,
+		tokenMaker: tokenMaker,
+		config:     config,
 	}
 
 	// if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -45,10 +49,10 @@ func errorResponse(err error) gin.H {
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	// router.POST("/users", server.createUser)
-	// router.POST("users/login", server.loginUser)
+	router.POST("/users", server.createUser)
+	router.POST("users/login", server.loginUser)
 
-	// router.POST("/token/renew_access", server.renewAccessToken)
+	router.POST("/token/renew_access", server.renewAccessToken)
 
 	// //require auth
 	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
